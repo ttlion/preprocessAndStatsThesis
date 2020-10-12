@@ -25,14 +25,16 @@ import sys
 # Defs with usage and examples
 
 def showUsage():
-    print('usage: python fill_data.py inputFile.csv timestepMax [option] [discrFile.csv]\n')
-    print('inputFile.csv: Input dataset in table format, in timeseries')
+    print('usage: python fill_data_LOCF.py inputFile.csv timestepMax [option] [discrFile.csv]\n')
+    print('inputFile.csv: Input dataset in table format, in time-series')
     print('timestepMax: number of maximum timesteps that are kept from the time-series inserted')
     print('option (0 or 1, default 1): 1 prints variables that were not discretized by the program, 0 does not')
     print('discrFile.csv (not mandatory): File with the discretizations to be made')
     print('\nImportant Note: To insert discrFile.csv as argument, option parameter must also be specified!')
-    print('\nRun python fill_data.py -e for an example of input')
-    print('Run python fill_data.py -d for detailed information on the format of discrFile.csv')
+    print('\nImportant Note: The column dateStep, with the timesteps of the time-series, must be named exatcly dateStep!')
+    print('\nRun python fill_data_LOCF.py -e for an example of input')
+    print('\nRun python fill_data_LOCF.py -d for detailed information on the format of discrFile.csv')
+    print('\nRun python fill_data_LOCF.py -h for usage')
     return
 
 def printExample():
@@ -142,7 +144,7 @@ if len(sys.argv) == 2:
 
 
 if len(sys.argv) != 3 and len(sys.argv) != 4 and len(sys.argv) != 5:
-    print('Arguments not properly inserted! Run with -h for usage')
+    print('Arguments not properly inserted! Run python fill_data_LOCF.py -h for usage')
     exit()
 
 ###########################################################################
@@ -154,7 +156,7 @@ discrDict = {} # have an empty dictionary by default
 if(len(sys.argv) == 5):
     
     if sys.argv[4].find('.csv') == -1:
-        print('File with discretizations must be .csv format! Run with -h for usage')
+        print('File with discretizations must be .csv format! Run python fill_data_LOCF.py -h for usage')
         exit()
     
     # Open the given input file with discretizations and parse the csv reader
@@ -165,7 +167,7 @@ if(len(sys.argv) == 5):
     row = next(csv_reader)
     if(row[0]!='Intervals'):
         print('File with discretization does not start with \'Intervals\'')
-        print('Run with -h for usage')
+        print('Run python fill_data_LOCF.py -h for usage')
         exit()
     
     
@@ -213,7 +215,7 @@ if(len(sys.argv) == 5):
 # Get input and output files from terminal
 
 if sys.argv[1].find('.csv') == -1:
-    print('Input file must be .csv format! Run with -h for usage')
+    print('Input file must be .csv format! Run python fill_data_LOCF.py -h for usage')
     exit()
     
 inputpath = sys.argv[1]
@@ -222,7 +224,7 @@ inputpath_noextension = inputpath.replace('.csv','')
 outputpath = inputpath_noextension + "_LOCF.csv" # exemplo
 
 if int(sys.argv[2]) < 0:
-    print('timestepMax cannot be negative! Run with -h for usage')
+    print('timestepMax cannot be negative! Run python fill_data_LOCF.py -h for usage')
     exit()
 
 timestepMax = int(sys.argv[2])
@@ -231,7 +233,7 @@ timestepMax = int(sys.argv[2])
 option = 1
 if len(sys.argv) == 4:
     if int(sys.argv[3]) != 0 and int(sys.argv[3]) != 1:
-        print('option argument must be either 0 or 1! Run with -h for usage')
+        print('option argument must be either 0 or 1! Run python fill_data_LOCF.py -h for usage')
         exit()
     option = int(sys.argv[3])
 
