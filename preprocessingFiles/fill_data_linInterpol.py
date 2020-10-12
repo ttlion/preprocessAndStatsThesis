@@ -26,14 +26,14 @@ from scipy.optimize import curve_fit
 # Defs with usage and examples
 
 def showUsage():
-    print('usage: python fill_data.py inputFile.csv timestepMax [option] [discrFile.csv]\n')
+    print('usage: python fill_data_linInterpol.py inputFile.csv timestepMax [option] [discrFile.csv]\n')
     print('inputFile.csv: Input dataset in table format, in timeseries')
     print('timestepMax: number of maximum timesteps that are kept from the time-series inserted')
     print('option (0 or 1, default 1): 1 prints variables that were not discretized by the program, 0 does not')
     print('discrFile.csv (not mandatory): File with the discretizations to be made')
     print('\nImportant Note: To insert discrFile.csv as argument, option parameter must also be specified!')
-    print('\nRun python fill_data.py -e for an example of input')
-    print('Run python fill_data.py -d for detailed information on the format of discrFile.csv')
+    print('\nRun python fill_data_linInterpol.py -e for an example of input')
+    print('Run python fill_data_linInterpol.py -d for detailed information on the format of discrFile.csv')
     return
 
 def printExample():
