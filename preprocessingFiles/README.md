@@ -2,28 +2,30 @@
 
 ## File discretize_dates.py
 
-* Converts data provided as observations in certain dates into time-series
+* Converts data provided as observations in certain dates into time-series.
 
-* Outputs the same dataset but with dates (dd/mm/yyyy) discretized into timesteps (0, 1, 2, ...)
+* Outputs the same dataset but with dates (dd/mm/yyyy) discretized into timesteps (0, 1, 2, ...).
 
-* It allows selecting the number of months between consecutive timesteps (defined as deltaT in program usage)
+* It allows selecting the number of months between consecutive timesteps (defined as deltaT in program's usage).
   * If option2 = 1 only keeps timesteps separated by the specified number of months
-    * For example, if patient has consultations in 01/01/2000, 01/04/2000, 01/05/2000, 01/07/2000, and choosing deltaT=3 (3 months interval)
-      * With option2 = 1 only the data from 01/01/2000 and 01/04/2000 and 01/07/2000 is kept (as timesteps 0, 1 and 2)
-  * If option2 = 0, program only uses the defined deltaT if there is not data between the specified timesteps
-    * For the same example where patient has consultations in 01/01/2000, 01/04/2000, 01/05/2000, 01/07/2000, and choosing deltaT=3 (3 months interval)
+    * For example, if patient has consultations in 01/01/2000, 01/04/2000, 01/05/2000, 01/07/2000, and choosing deltaT=3 (3 months interval).
+      * With option2 = 1 only the data from 01/01/2000 and 01/04/2000 and 01/07/2000 is kept (as timesteps 0, 1 and 2).
+  * If option2 = 0, program only uses the defined deltaT if there is not data between the specified timesteps.
+    * For the same example where patient has consultations in 01/01/2000, 01/04/2000, 01/05/2000, 01/07/2000, and choosing deltaT=3 (3 months interval).
       * With option2 = 0 all data is kept (as timesteps 0, 3, 4 and 6), program chooses deltaT=1 as it is the maximum deltaT possible to keep all data.
   * Usually, option2 = 1 is the desired!
 
 * It allows defining if timesteps in which there is no consultation are filled with nearest consultation or with ?
-  * For example, if consultations in 01/01/2000 and 01/07/2000 and defining deltaT=3 (3 months interval)
-    * Timestep 1 is the data from 01/04/2000, which does not exist
-      * If option1 = 0, timestep 1 is filled also with data from 01/01/2000
+  * For example, if consultations in 01/01/2000 and 01/07/2000 and defining deltaT=3 (3 months interval).
+    * Timestep 1 is the data from 01/04/2000, which does not exist.
+      * If option1 = 0, timestep 1 is filled also with data from 01/01/2000.
       * If option1 = 1, timestep 1 is filled with ?
 
-* Run "python discretize_dates.py -h" to get usage of program, with description of inputs
+* Example input file: example_file_dates.csv
 
-* Run "python discretize_dates.py -e" to get example of input file
+* Run "python discretize_dates.py -h" to get usage of program, with description of inputs.
+
+* Run "python discretize_dates.py -e" to get another example of input file.
 
 ## File fill_data.py
 

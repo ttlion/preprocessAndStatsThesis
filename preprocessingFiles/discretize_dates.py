@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 File to discretize dates in datasets.
-The file outputs the same dataset, but with dates discretized into 0, 1, 2, ...
+The file outputs the same dataset, but with dates discretized into timesteps (0, 1, 2, ...)
 
 @author: Tiago Leão
 """
@@ -24,12 +24,13 @@ def months_appart(d1, d2):
 
 def showUsage():
     print('usage: python discretize_dates.py inputFile.csv outputFile.csv deltaT option1 option2\n')
-    print('inputFile.csv: Input dataset in table format')
-    print('outputFile.csv: Output dataset in table format')
+    print('inputFile.csv: Input dataset in CSV format')
+    print('outputFile.csv: Desired output file')
     print('deltaT: number of months of interval between two timesteps to be created')
     print('option1 (0 or 1): 0 does Last Obs Carried Forward, 1 fills with ?')
-    print('option2 (0 or 1): 0 keeps existing intermeditate timesteps, 1 forces timeseries always with deltaT between consecutive timesteps)')
+    print('option2 (0 or 1): 0 keeps existing intermeditate timesteps, 1 forces timeseries always with deltaT between consecutive timesteps')
     print('\nRun python discretize_dates.py -e for an example of input')
+    print('\nRun python discretize_dates.py -h for usage')
     return
 
 def printExample():
@@ -73,7 +74,7 @@ if len(sys.argv) == 2:
 
 
 if len(sys.argv) != 6:
-    print('Not all arguments inserted! Run with -h for usage')
+    print('Not all arguments inserted! Run python discretize_dates.py -h for usage')
     exit()
 
 ###########################################################################
@@ -81,11 +82,11 @@ if len(sys.argv) != 6:
 # Read input and output files
 
 if sys.argv[1].find('.csv') == -1:
-    print('Input file must be .csv format! Run with -h for usage')
+    print('Input file must be .csv format! Run python discretize_dates.py -h for usage')
     exit()
 
 if sys.argv[2].find('.csv') == -1:
-    print('Output file must be .csv format! Run with -h for usage')
+    print('Output file must be .csv format! Run python discretize_dates.py -h for usage')
     exit()
 
 inputpath = sys.argv[1]
@@ -130,7 +131,7 @@ prevRef = -100
 currRef = 0
 
 if int(sys.argv[3]) < 1:
-    print('deltaT must be positive! Run with -h for usage')
+    print('deltaT must be positive! Run python discretize_dates.py -h for usage')
     exit()
 
 # timeIntervals sao de meses
@@ -140,11 +141,11 @@ timeInterval = int(sys.argv[3])
 # Opcoes dos modos de funcionamento do programa
 
 if int(sys.argv[4]) != 0 and int(sys.argv[4]) != 1 :
-    print('option 1 must be 0 or 1! Run with -h for usage')
+    print('option 1 must be 0 or 1! Run python discretize_dates.py -h for usage')
     exit()
 
 if int(sys.argv[5]) != 0 and int(sys.argv[5]) != 1 :
-    print('option 2 must be 0 or 1! Run with -h for usage')
+    print('option 2 must be 0 or 1! Run python discretize_dates.py -h for usage')
     exit()
 
 option = int(sys.argv[4])
