@@ -27,6 +27,39 @@
 
 * Run "python discretize_dates.py -e" to get another example of input file.
 
+## File split_beforeVSafterNIV.csv
+
+* Converts data provided as observations in certain dates (dd/mm/yyyy) into time-series. It creates, for each id, two time-series, one before NIV and other after NIV.
+  * Note: NIV is used because file was created in context of ALS disease, but NIV can be seen simply as a date according to which the time-series should be separated!
+
+* The *first column of input table* must be named REF, having the *patients' ids*.
+
+* For each id, there must be provided the *consultation dates in the second column of input table*.
+  * Each patient can have multiple consultations (in different dates), but only one NIV date.
+
+* For each id, there must be given the *NIV date in the last column of the input table*.
+  * For a certain id, the NIV date must be the same in all consultations (in all rows corresponding to that id, in the input table).
+
+* For each id, there is created a time-series before and a time-series after NIV. Each time-series starts in timestep 0, and consecutive timesteps are separated by a number of months defined by the user (defined as deltaT in program's usage).
+  * For example, if patient has consultations in 01/01/2000, 01/03/2000, 01/05/2000, 01/07/2000, has NIV in 01/04/2000, and choosing deltaT=2 (2 months interval).
+  * The time-series with data before NIV is composed by data of the consultations in 01/01/2000, 01/03/2000, corresponding to timesteps 0 and 1 before NIV.
+  * The time-series with data after NIV is composed by data of the consultations in 01/05/2000, 01/07/2000, corresponding to timesteps 0 and 1 after NIV.
+
+* It allows defining if timesteps in which there is no consultation are filled with previous consultation or with ?
+  * For example, if consultations in 01/03/2000 and 01/07/2000, NIV date in 01/01/2000, and defining deltaT=2 (2 months interval).
+    * Only series after NIV is created (only consultations after NIV exist).
+      * Timestep 0 is 01/03/2000 (first consultation after NIV).
+      * Timestep 1 is 01/05/2000 (2 months after).
+        * It is filled with ? if option=1. Is filled with data of timestep 0 if option=0.
+      * Timestep 2 is 01/07/2000 (2 months after).
+
+* Example input file: example_file_to_split.csv
+
+* Run "python split_beforeVSafterNIV.py -h" to get usage of program, with description of inputs.
+
+* Run "python split_beforeVSafterNIV.py -e" to get example of input file.
+
+
 ## File fill_data_LOCF.py
 
 * Fills time-series using LOCF.
