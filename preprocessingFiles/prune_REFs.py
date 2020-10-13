@@ -21,6 +21,63 @@ import sys
 
 ###########################################################################
 ###########################################################################
+# Deal with command line user interface
+
+def showUsage():
+    print('usage: python prune_REFs.py dataset1.csv dataset2.csv outputFile.csv\n')
+    print('dataset1.csv: Input dataset, a table in CSV format')
+    print('dataset2.csv: Input dataset, a table in CSV format')
+    print('outputFile.csv: Desired output file in CSV format')
+    print('\nImportant Note: The first column of both dataset1 and dataset2 must be named REF and contain the unique ids of subjects')
+    print('\nProgram outputs the data of dataset2 whose subjects (REFs) are in both dataset1 and dataset2')
+    print('\nRun python prune_REFs.py -e for an example of input file')
+    print('\nRun python prune_REFs.py -h for usage')
+    return
+
+def printExample():
+    print('Example of Input:\n')
+    print('+-----+------------+----------+----------+')
+    print('| REF | Date       | Feature1 | Feature2 |')
+    print('+-----+------------+----------+----------+')
+    print('| 1   | 10/02/2000 | a        | A        |')
+    print('+-----+------------+----------+----------+')
+    print('| 1   | 03/04/2000 | b        | B        |')
+    print('+-----+------------+----------+----------+')
+    print('| 1   | 05/05/2000 |          |          |')
+    print('+-----+------------+----------+----------+')
+    print('| 1   | 07/01/2001 | d        | D        |')
+    print('+-----+------------+----------+----------+')
+    print('| 2   | 03/03/1999 | e        | E        |')
+    print('+-----+------------+----------+----------+')
+    print('| 2   | 04/02/2000 |          | F        |')
+    print('+-----+------------+----------+----------+')
+    print('| 2   | 05/04/2001 | g        | G        |')
+    print('+-----+------------+----------+----------+')
+    print('| 3   | 10/06/2018 | h        | H        |')
+    print('+-----+------------+----------+----------+')
+    print('| 3   | 04/07/2018 | i        | I        |')
+    print('+-----+------------+----------+----------+')
+    print('| 3   | 04/09/2018 | l        | L        |')
+    print('+-----+------------+----------+----------+')
+    return
+
+if len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        showUsage()
+        exit()
+    elif sys.argv[1] == '-e':
+        printExample()
+        exit()
+    else:
+        print('Arguments not properly inserted! Run python prune_REFs.py -h for usage')
+        exit()
+
+if len(sys.argv) != 4:
+    print('Arguments not properly inserted! Run python prune_REFs.py -h for usage')
+    exit()
+
+###########################################################################
+###########################################################################
 # Ler ficheiros de input e output
 
 inputpathDyn = sys.argv[1]
