@@ -25,12 +25,13 @@ import sys
 # Defs with usage and examples
 
 def showUsage():
-    print('usage: python fill_data_LOCF.py inputFile.csv timestepMax [option] [discrFile.csv]\n')
+    print('usage: python fill_data_LOCF.py inputFile.csv timestepMax option1 [option2] [discrFile.csv]\n')
     print('inputFile.csv: Input dataset in table format, in time-series')
     print('timestepMax: number of maximum timesteps that are kept from the time-series inserted')
-    print('option (0 or 1, default 1): 1 prints variables that were not discretized by the program, 0 does not')
+    print('option1 (0 or 1, mandatory): 1 removes REFs with at least one variable without observations after filling. 0 does not')
+    print('option2 (0 or 1, default 1): 1 prints variables that were not discretized by the program, 0 does not')
     print('discrFile.csv (not mandatory): File with the discretizations to be made')
-    print('\nImportant Note: To insert discrFile.csv as argument, option parameter must also be specified!')
+    print('\nImportant Note: To insert discrFile.csv as argument, option2 parameter must also be specified!')
     print('\nImportant Note: The column dateStep, with the timesteps of the time-series, must be named exatcly dateStep!')
     print('\nRun python fill_data_LOCF.py -e for an example of input')
     print('\nRun python fill_data_LOCF.py -d for detailed information on the format of discrFile.csv')
@@ -40,7 +41,7 @@ def showUsage():
 def printExample():
     print('The input csv table must be in the format of the following example')
     print('The column dateStep, with the timesteps of the time-series, must be named exatcly dateStep, as the program uses the name of this column')
-    print('In the following example, REFs 2, 3 and 15 would be completely filled. REF 10 would be removed')
+    print('In the following example, REFs 2, 3 and 15 would be completely filled. REF 10 would be removed if option1=1')
     print('Example of Input:')
     
     print('+-----+----------+----------+----------+')
@@ -143,7 +144,7 @@ if len(sys.argv) == 2:
         exit()
 
 
-if len(sys.argv) != 3 and len(sys.argv) != 4 and len(sys.argv) != 5:
+if len(sys.argv) != 4 and len(sys.argv) != 5 and len(sys.argv) != 6:
     print('Arguments not properly inserted! Run python fill_data_LOCF.py -h for usage')
     exit()
 
@@ -153,14 +154,14 @@ if len(sys.argv) != 3 and len(sys.argv) != 4 and len(sys.argv) != 5:
 
 discrDict = {} # have an empty dictionary by default
 
-if(len(sys.argv) == 5):
+if(len(sys.argv) == 6):
     
-    if sys.argv[4].find('.csv') == -1:
+    if sys.argv[5].find('.csv') == -1:
         print('File with discretizations must be .csv format! Run python fill_data_LOCF.py -h for usage')
         exit()
     
     # Open the given input file with discretizations and parse the csv reader
-    discrFile = open(sys.argv[4], newline='', encoding='utf-8-sig')
+    discrFile = open(sys.argv[5], newline='', encoding='utf-8-sig')
     csv_reader = csv.reader(discrFile, delimiter=',')
     
     # Read first line and check if it has 'Intervals'
@@ -230,12 +231,19 @@ if int(sys.argv[2]) < 0:
 timestepMax = int(sys.argv[2])
 
 
-option = 1
-if len(sys.argv) == 4:
-    if int(sys.argv[3]) != 0 and int(sys.argv[3]) != 1:
-        print('option argument must be either 0 or 1! Run python fill_data_LOCF.py -h for usage')
+if int(sys.argv[3]) != 0 and int(sys.argv[3]) != 1:
+    print('option1 argument must be either 0 or 1! Run python fill_data_LOCF.py -h for usage')
+    exit()
+
+option1 = int(sys.argv[3])
+
+
+option2 = 1
+if len(sys.argv) == 6:
+    if int(sys.argv[4]) != 0 and int(sys.argv[4]) != 1:
+        print('option2 argument must be either 0 or 1! Run python fill_data_LOCF.py -h for usage')
         exit()
-    option = int(sys.argv[3])
+    option2 = int(sys.argv[4])
 
 
 ###########################################################################
@@ -260,7 +268,8 @@ data_with_LOCF = inputFileDataFrame.groupby(inputFileDataFrame.index).apply(lamb
 # means that, for some feature for that patient, there was not a single measurement
 # in all time-series of that patient
 
-data_with_LOCF = data_with_LOCF.dropna()
+if option1 == 1:
+    data_with_LOCF = data_with_LOCF.dropna()
 
 # Keep in the database only timesteps until a certain specified maximum
 data_with_LOCF = data_with_LOCF[data_with_LOCF['dateStep'] <= timestepMax]
@@ -275,7 +284,7 @@ k=0
 for column in data_with_LOCF:
     
     if (column not in discrDict):
-        if option == 1:
+        if option2 == 1:
             print('Program did not discretize: ' + column);
         continue;
     
@@ -300,15 +309,3 @@ for column in data_with_LOCF:
 # Write new data into output file .csv
 
 data_with_LOCF.to_csv(outputpath, encoding='utf-8-sig', index=True, sep=',')
-
-"""
-# This commented lines allow having some stats over the output dataset
-
-data_grouped = data_with_LOCF.groupby(data_with_LOCF.index)
-
-# Duration of the timeseries of each patient
-seriesDurationPerRef_changed = data_grouped['dateStep'].agg('max').to_numpy()
-
-# Number of patients
-numberDifferentRefs_changed = data_grouped.ngroups
-"""
