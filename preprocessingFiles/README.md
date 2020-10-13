@@ -51,11 +51,11 @@
 * Program can also discretize variables into bins if desired!
   * Example discretization file: example_file_to_fill_discr.csv
 
-* Run "python fill_data_LOCF.py -h" for usage
+* Run "python fill_data_LOCF.py -h" for usage.
 
-* Run "python fill_data_LOCF.py -e" for example of input file format
+* Run "python fill_data_LOCF.py -e" for example of input file format.
 
-* Run "python fill_data_LOCF.py -d" for explanation of the discretization file
+* Run "python fill_data_LOCF.py -d" for explanation of the discretization file.
 
 ## File fill_data_linInterpol.py
 
@@ -78,8 +78,24 @@
 * Program can also discretize variables into bins if desired!
   * Example discretization file: example_file_to_fill_discr.csv
 
-* Run "python fill_data_linInterpol.py -h" for usage
+* Run "python fill_data_linInterpol.py -h" for usage.
 
-* Run "python fill_data_linInterpol.py -e" for example of input file format
+* Run "python fill_data_linInterpol.py -e" for example of input file format.
 
-* Run "python fill_data_linInterpol.py -d" for explanation of the discretization file
+* Run "python fill_data_linInterpol.py -d" for explanation of the discretization file.
+
+## File prune_REFs.py
+
+* Given two datasets, checks which ids are in both datasets and keeps the data of those ids from the second dataset.
+
+* Ids must be given in the first column of both datasets, which must be named REF.
+
+* For example, using two datasets, dataset1 and dataset2.
+  * If dataset1 has data for REFs 1, 2 and 3, while dataset2 has data for REFs 2, 3 and 4, 
+    * The program will output the data of REFs 2 and 3 that is dataset2.
+
+* Example input files: example_file_dataset1.csv and example_file_dataset2.csv
+
+* Run "python prune_REFs.py -h" for usage.
+
+* Run "python prune_REFs.py -e" for example of input files format.
