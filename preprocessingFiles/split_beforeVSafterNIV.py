@@ -15,6 +15,46 @@ import sys
 
 ###########################################################################
 ###########################################################################
+# Defs for user interface
+
+def showUsage():
+    print('usage: python split_beforeVSafterNIV.py inputFile.csv deltaT option\n')
+    print('inputFile.csv: Input dataset in CSV format')
+    print('deltaT: number of months of interval between two timesteps to be created')
+    print('option (0 or 1): 0 does Last Obs Carried Forward, 1 fills with ?')
+    print('\nRun python split_beforeVSafterNIV.py -e for an example of input')
+    print('\nRun python split_beforeVSafterNIV.py -h for usage')
+    return
+
+def printExample():
+    print('Example of Input:\n')
+    print('+-----+------------+----------+----------+------------+')
+    print('| REF | Date       | Feature1 | Feature2 | NIV        |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 1   | 10/02/2000 | a        | A        | 01/06/2000 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 1   | 03/04/2000 | b        | B        | 01/06/2000 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 1   | 05/05/2000 | c        | C        | 01/06/2000 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 1   | 07/01/2001 | d        | D        | 01/06/2000 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 2   | 03/03/1999 | e        | E        | 01/01/2001 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 2   | 04/02/2000 | f        | F        | 01/01/2001 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 2   | 05/04/2001 | g        | G        | 01/01/2001 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 3   | 10/06/2018 | h        | H        | 01/01/2018 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 3   | 04/07/2018 | i        | I        | 01/01/2018 |')
+    print('+-----+------------+----------+----------+------------+')
+    print('| 3   | 04/09/2018 | l        | L        | 01/01/2018 |')
+    print('+-----+------------+----------+----------+------------+')
+    return
+
+###########################################################################
+###########################################################################
 # Defs
 
 def months_appart(d1, d2):
@@ -28,11 +68,32 @@ def writeFillToFile(option, fileToWrite, writers, ref,
         writers[fileToWrite].writerow([ref , timestepDiscretized, allUnknown])
         
     return
+
+###########################################################################
+###########################################################################
+# Check command line arguments validity
+
+if len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        showUsage()
+        exit()
+    elif sys.argv[1] == '-e':
+        printExample()
+        exit()
+
+
+if len(sys.argv) != 4:
+    print('Not all arguments inserted! Run python split_beforeVSafterNIV.py -h for usage')
+    exit()
+
 ###########################################################################
 ###########################################################################
 # Ler ficheiros de input e output
 
-#inputpath =  input("Enter input file (write filename.csv):")
+if sys.argv[1].find('.csv') == -1:
+    print('Input file must be .csv format! Run python split_beforeVSafterNIV.py -h for usage')
+    exit()
+
 inputpath = sys.argv[1]
 
 #outputpath =  input("Enter desired output file name (write filename.csv):")
@@ -87,13 +148,19 @@ allUnknown = ['?'] * (len(header) - 2)
 prevRef = -100
 currRef = 0
 
+if int(sys.argv[2]) < 1:
+    print('deltaT must be positive! Run python split_beforeVSafterNIV.py -h for usage')
+    exit()
+
 # timeIntervals sao de meses
-#timeInterval = int( input("Inserir numero de meses de intervalo entre dois timesteps consecutivos: "))
-timeInterval = 3 # exemplo
+timeInterval = int(sys.argv[2])
 
 # Opcoes dos modos de funcionamento do programa
-#option = int(input("Inserir Opção (0 faz Last Obs Carried Forward, 1 faz fill com ?): "))
-option = 0
+if int(sys.argv[3]) != 0 and int(sys.argv[3]) != 1 :
+    print('option must be 0 or 1! Run python split_beforeVSafterNIV.py -h for usage')
+    exit()
+
+option = int(sys.argv[3])
 
 # Meter a ultima posicao como onde estara o NIV, guardar o indice dessa ultima posicao numa var
 indexNIV = len(header) - 1
