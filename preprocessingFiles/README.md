@@ -59,18 +59,27 @@
 
 ## File fill_data_linInterpol.py
 
-* Fills time-series using linear interpolation and extrapolation
-    * Interpolation fills data between certain timesteps, for example, if a_1=8, a_2=?, a_3=10, program fills a_2=9
-    * Extrapolation fills data that is not between timesteps, for example, if a_1=8, a_2=9, a_3=?, program fills a_3=10
+* Fills time-series using linear interpolation and extrapolation.
+    * Interpolation fills data between certain timesteps, for example, if a_0=8, a_1=?, a_2=10, program fills a_1=9.
+    * Extrapolation fills data that is not between timesteps, for example, if a_0=8, a_1=9, a_2=?, program fills a_2=10.
 
-* Removes subjects where after filling at least one variable has missing data
-  * Comment line 322 to avoid this behavior
+* Can remove subjects where, after filling, at least one variable still has missing data.
+  * If option1=1, program *REMOVES* subjects where, after filling, at least one variable still has missing data.
+  * If option1=0, program *DOES NOT* remove subjects where, after filling, at least one variable still has missing data.
 
-* CSV input file should be with "," instead of ";"
+* User must introduce timestepMax, which is the maximum timestep for all time-series.
+  * For example, if timestepMax=2, program will only keep timesteps 0, 1 and 2 of all time-series.
+  * Note: if do not want to have a maximum timestep, just put an enormous number here!
+
+* CSV input file should be with "," instead of ";" !!
+
+* Example input file: example2_file_to_fill.csv
+
+* Program can also discretize variables into bins if desired!
+  * Example discretization file: example_file_to_fill_discr.csv
 
 * Run "python fill_data_linInterpol.py -h" for usage
 
 * Run "python fill_data_linInterpol.py -e" for example of input file format
 
-* Program also discretizes variables into bins if desired
-  * Run "python fill_data_linInterpol.py -d" for example of discretization file
+* Run "python fill_data_linInterpol.py -d" for explanation of the discretization file
