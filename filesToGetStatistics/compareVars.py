@@ -70,7 +70,6 @@ for pathCorrect, pathEstim in severalPaths:
         listsWithPredictedCounts[key] += list(auxDf[varToCheck + '[' + str(key) + ']'])
         dictWithSeriesLength[key] += list(auxDf['length'])
 
-print(newDf)
 ###################################
 # Create dataframe with all info
 rowsDf = ['Accuracy', '% Above', '% Bellow', '1st Quartile', 'Sensitivity', 'Specificity', 'AUC', 'Evaluated patients']
@@ -165,23 +164,24 @@ print(statsDf)
 statsFileName = '\\stats_befNIV_' + addToFilenames + '.csv' 
 statsDf.to_csv(sys.argv[2] + statsFileName, sep=';') 
 
+# The code bellow can be used to produce histogram of the predictions of a certain timestep:
 ##############################################
 # Generate histogram
 
 # Proper histogram filename
-histFileName = '\\hist_afterNIV_' + addToFilenames
+# histFileName = '\\hist_afterNIV_' + addToFilenames
 
 # Get values only of Var[1] to present histogram
-listWithCorrectCounts = [int(i) for i in listsWithCorrectCounts[1]]
-listWithPredictedCounts = [int(i) for i in listsWithPredictedCounts[1]]
-listWithSubtractions = np.array(listWithPredictedCounts) - np.array(listWithCorrectCounts)
+# listWithCorrectCounts = [int(i) for i in listsWithCorrectCounts[1]]
+# listWithPredictedCounts = [int(i) for i in listsWithPredictedCounts[1]]
+# listWithSubtractions = np.array(listWithPredictedCounts) - np.array(listWithCorrectCounts)
 
 # Plot Histogram of predictions done in timestep1
-mybins = np.arange(start=-10.5, stop=10.5, step=1)
-plt.hist(listWithSubtractions, bins=mybins, alpha=0.5, histtype='bar', ec='black', color='purple', density=True)
-plt.title('Diferences between estimated class and real class')
-plt.xticks(np.arange(-10, 11, step=1))
-plt.xlabel('Distance to correct class')
-plt.ylabel('Percentage of the {} analysed values'.format(len(np.array(listsWithPredictedCounts[1]))))
-plt.savefig(sys.argv[2] + histFileName)
-#plt.show()
+# mybins = np.arange(start=-10.5, stop=10.5, step=1)
+# plt.hist(listWithSubtractions, bins=mybins, alpha=0.5, histtype='bar', ec='black', color='purple', density=True)
+# plt.title('Diferences between estimated class and real class')
+# plt.xticks(np.arange(-10, 11, step=1))
+# plt.xlabel('Distance to correct class')
+# plt.ylabel('Percentage of the {} analysed values'.format(len(np.array(listsWithPredictedCounts[1]))))
+# plt.savefig(sys.argv[2] + histFileName)
+# #plt.show()
