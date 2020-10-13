@@ -27,25 +27,35 @@
 
 * Run "python discretize_dates.py -e" to get another example of input file.
 
-## File fill_data.py
+## File fill_data_LOCF.py
 
-* Fills time-series using LOCF
-* Performs usual LOCF iteration and then a backwards iteration
+* Fills time-series using LOCF.
+
+* Performs usual LOCF iteration and then a backwards iteration.
   * If a_0=?, a_1=8, a_2=9, a_3=? program does:
-    * First iteration fills a_3=9 (usual LOCF)
-    * Backwards iterations fills a_0=8
-* Removes subjects where after filling at least one variable still has missing data
-  * Comment line 261 to avoid this behavior
+    * First iteration fills a_3=9 (usual LOCF).
+    * Backwards iterations fills a_0=8.
 
-* CSV input file should be with "," instead of ";"
+* Can remove subjects where, after filling, at least one variable still has missing data.
+  * If option1=1, program *REMOVES* subjects where, after filling, at least one variable still has missing data.
+  * If option1=0, program *DOES NOT* remove subjects where, after filling, at least one variable still has missing data.
 
-* Run "python fill_data.py -h" for usage
+* User must introduce timestepMax, which is the maximum timestep for all time-series.
+  * For example, if timestepMax=2, program will only keep timesteps 0, 1 and 2 of all time-series.
+  * Note: if do not want to have a maximum timestep, just put an enormous number here!
 
-* Run "python fill_data.py -e" for example of input file format
+* CSV input file should be with "," instead of ";" !!
 
-* Program also discretizes variables into bins if desired
-  * Run "python fill_data.py -d" for example of discretization file
+* Example input file: example_file_to_fill.csv
 
+* Program can also discretize variables into bins if desired!
+  * Example discretization file: example_file_to_fill_discr.csv
+
+* Run "python fill_data_LOCF.py -h" for usage
+
+* Run "python fill_data_LOCF.py -e" for example of input file format
+
+* Run "python fill_data_LOCF.py -d" for explanation of the discretization file
 
 ## File fill_data_linInterpol.py
 
