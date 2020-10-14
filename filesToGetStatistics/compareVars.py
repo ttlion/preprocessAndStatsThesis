@@ -12,6 +12,63 @@ import statistics
 
 ###########################################################################
 ###########################################################################
+# Defining proper command-line user interface
+
+def showUsage():
+    print('usage: python compareVars.py filesToCompare.csv outputPath timestepUntilCheckVar minTimestepLengthSeries maxTimestepLengthSeries varToCheck\n')
+    print('filesToCompare.csv: File with pairs of files to compare. Each line of this file is in the form "fileWithCorrectValues,fileWithPredictions". See example')
+    print('outputPath: Desired path for writing output file. If using just . the program will write in directory of program!')
+    print('timestepUntilCheckVar: Program checks the predictions of varToCheck from timestep 1 until timestep timestepUntilCheckVar')
+    print('minTimestepLengthSeries: Minimum size of the time-series (in the files with correct values) that program considers for getting the statistics')
+    print('maxTimestepLengthSeries: Maximum size of the time-series (in the files with correct values) that program considers for getting the statistics')
+    print('varToCheck: Variable that is in the files with predictions, whose predictions are to be compared with the true values\n')
+    print('------------------------------------')
+    print('IMPORTANT IMPORTANT IMPORTANT')
+    print('timestepUntilCheckVar must be between 1 and the maximum timestep for which there are predictions in the fileWithPredictions files of filesToCompare.csv')
+    print('varToCheck must be the same variable for which there are predictions in the fileWithPredictions files of filesToCompare.csv')
+    print('IMPORTANT IMPORTANT IMPORTANT')
+    print('------------------------------------')
+    print('\nRun python compareVars.py -e for an example of filesToCompare.csv')
+    print('\nRun python compareVars.py -h for usage')
+    return
+
+def printExample():
+    print('The file filesToCompare.csv has the following format:\n')
+    print('example_correctLabels_0.csv,example_estimatedLabels_0.csv\nexample_correctLabels_1.csv,example_estimatedLabels_1.csv\n...If desired, more lines can be added, always with files in the form fileWithCorrectValues,fileWithPredictions...\n')
+    print('The files with correct values, for instance example_correctLabels_0.csv, have the following format (example for: three variables X, Y and Z; three timesteps 0, 1 and 2; two REFs 1 and 2):\n')
+    print('REF,X__0,Y__0,Z__0,X__1,Y__1,Z__1,X__2,Y__2,Z__2\n1,-1,-1,-1,2,2,2,3,3,3\n2,-1,-1,-1,9,9,9,3,3,3\n')
+    print('The files with predictions, for instance example_estimatedLabels_0.csv, have the following format (for instance, for predictions of X variable until timestep 2 for REFs 1 and 2):\n')
+    print('id,X[1],X[2]\n1,2,3\n2,2,3\n')
+    print('Note that timesteps in the file with correct values are with __ and that timesteps in the file with predictions are with [ ]')
+
+
+# Check command-line arguments validity
+if len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        showUsage()
+        exit()
+    elif sys.argv[1] == '-e':
+        printExample()
+        exit()
+
+if len(sys.argv) != 7:
+    print('Not all arguments inserted! Run python compareVars.py -h for usage')
+    exit()
+
+if int(sys.argv[4]) < 0:
+    print('minTimestepLengthSeries cannot be < 0 ! Run python compareVars.py -h for usage')
+    exit()
+
+if int(sys.argv[5]) < 0:
+    print('maxTimestepLengthSeries cannot be < 0 ! Run python compareVars.py -h for usage')
+    exit()
+
+if int(sys.argv[4]) > int(sys.argv[5]):
+    print('minTimestepLengthSeries cannot be > maxTimestepLengthSeries ! Run python compareVars.py -h for usage')
+    exit()
+
+###########################################################################
+###########################################################################
 # Ler ficheiros de input
 
 severalPaths = []
@@ -161,7 +218,8 @@ print(statsDf)
 
 ###################################
 # Store Dataframe in csv file
-statsFileName = '\\stats_befNIV_' + addToFilenames + '.csv' 
+# statsFileName = '\\stats_befNIV_' + addToFilenames + '.csv' 
+statsFileName = '\\output_stats.csv'
 statsDf.to_csv(sys.argv[2] + statsFileName, sep=';') 
 
 # The code bellow can be used to produce histogram of the predictions of a certain timestep:
