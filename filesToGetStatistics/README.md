@@ -1,5 +1,10 @@
 # Files for getting statistics
 
+Files provided:
+  * [compareVars.py](#file-comparevarspy)
+  * [getParentsCountsOfTimesteps.py](#file-getparentscountsoftimestepspy)
+  * [getCountsOfRelations.py](#file-getcountsofrelationspy)
+
 ## File compareVars.py
 
 * Allows getting several statistical indicators regarding the comparison of true values and respective predictions, for a certain variable throughout multiple timesteps.
@@ -181,4 +186,6 @@ tag2  6  2  2  2  2
 * Run "python getParentsCountsOfTimesteps.py -eDBNs" to get example of dbnsToUse.csv.
 
 
+## File getCountsOfRelations.py
 
+bla bla bla TODO
