@@ -11,6 +11,76 @@ import re
 
 ###########################################################################
 ###########################################################################
+# Defining proper command-line user interface
+
+def showUsage():
+    print('usage: python getCountsOfRelations.py parentsToCheck.csv dbnsToUse.csv timestepInit timestepEnd \n')
+    print('Program counts, considering the DBNs in dbnsToUse.csv, the number of edges between each pair of variables from parentsToCheck.csv. The counts are made considering, in each DBN, all timesteps from timestepInit until timestepEnd\n')
+    print('Program provides as output a 2d matrix with the counts done between each pair of variables (matrix is symmetric, as direction of edges is not important)\n')
+    print('parentsToCheck.csv: has a line with all variables for which the user wants to know the number of edges between the respective pairs')
+    print('dbnsToUse.csv: has the DBNs to consider')
+    print('timestepInit: has the initial timestep, to start considering relations among variables')
+    print('timestepEnd: has the final timestep, to finish considering relations among variables')
+    print('\nRun python getCountsOfRelations.py -eParents for an example of parentsToCheck.csv')
+    print('\nRun python getCountsOfRelations.py -eDBNs for an example of dbnsToUse.csv')
+    print('\nRun python getCountsOfRelations.py -h for usage')
+    return
+
+def printExampleParents():
+    print('This file has a single line with the names of the desired variables, which can be static or dynamic')
+    print('The program creates a 2d matrix where each dimension of the matrix has the variables of this file, and each element of the matrix has the number of edges between the respective variables. The matrix is symmetric because the direction of the edges is not relevant.')
+    print('Example of a file, for dynamic variables X, Y and Z, and static variables A and B:\n')
+    print('X,Y,Z,A,B')
+    return
+
+def printExampleDBNs():
+    print('This file must have the DBNs that must be considered for making the counts.')
+    print('The DBNs must be sdtDBNs stored in a file, see the sdtDBN webpage for more details.')
+    print('This file has multiple lines. Each line must have a tag associated, which is done by putting the names of the DBNs of each line always in the format tag_someDesiredName')
+    print('The program outputs the analyzed tags.')
+    print('An example would be the following:\n')
+    print('tag1_someStoredDBN1.txt\ntag2_someStoredDBN2.txt,tag2_someOtherStoredDBN2.txt\n')
+    print('In the previous example, the program would make the counts considering all three DBNs (tag1_someStoredDBN1.txt, tag2_someStoredDBN2.txt and tag2_someOtherStoredDBN2.txt). Then, besides providing the counts as output, the program would output that it analyzed both tag1 and tag2')
+    return
+
+# Check command-line arguments validity
+if len(sys.argv) == 2:
+    if sys.argv[1] == '-h':
+        showUsage()
+        exit()
+    elif sys.argv[1] == '-eParents':
+        printExampleParents()
+        exit()
+    elif sys.argv[1] == '-eDBNs':
+        printExampleDBNs()
+        exit()
+
+if len(sys.argv) != 5:
+    print('Not all arguments inserted! Run python getCountsOfRelations.py -h for usage')
+    exit()
+
+if sys.argv[1].find('.csv') == -1:
+    print('Input file parentsToCheck.csv must be .csv format! Run python getCountsOfRelations.py -h for usage')
+    exit()
+
+if sys.argv[2].find('.csv') == -1:
+    print('Input file dbnsToUse.csv must be .csv format! Run python getCountsOfRelations.py -h for usage')
+    exit()
+
+if int(sys.argv[3]) < 0:
+    print('timestepInit cannot be < 0 ! Run python getCountsOfRelations.py -h for usage')
+    exit()
+
+if int(sys.argv[4]) < 0:
+    print('timestepEnd cannot be < 0 ! Run python getCountsOfRelations.py -h for usage')
+    exit()
+
+if int(sys.argv[3]) > int(sys.argv[4]):
+    print('timestepInit cannot be > timestepEnd ! Run python getCountsOfRelations.py -h for usage')
+    exit()
+
+###########################################################################
+###########################################################################
 # Ler ficheiros de input
 
 parentsToCheckTableIndx = { }
@@ -71,19 +141,20 @@ with open(sys.argv[2]) as csv_file:
 # Put everything in dataframe
 
 dataframeFinal = pd.DataFrame(matrixWithCounts, index = list( parentsToCheckTableIndx.keys() ), columns=list( parentsToCheckTableIndx.keys() ))
-
-# Store Dataframe in csv file
-statsFileName = 'relationsCounts_timesteps _{}_ate{}_contagens.csv'.format(timestepInit,timestepEnd) 
-dataframeFinal.to_csv(statsFileName, sep=';')
-
-dataframeFinal = dataframeFinal.apply(lambda x: x/sumVar)
-
-dataframeFinal = dataframeFinal.round(4)
 print(dataframeFinal)
 
 # Store Dataframe in csv file
-statsFileName = 'relationsCounts_timesteps _{}_ate{}_percentagens.csv'.format(timestepInit,timestepEnd) 
+statsFileName = 'relationsCounts_timestep_{}_until_{}_counts.csv'.format(timestepInit,timestepEnd) 
 dataframeFinal.to_csv(statsFileName, sep=';')
+
+# To normalize values uncomment this
+# dataframeFinal = dataframeFinal.apply(lambda x: x/sumVar)
+# dataframeFinal = dataframeFinal.round(4)
+# print(dataframeFinal)
+#
+# # Store Dataframe in csv file
+# statsFileName = 'relationsCounts_timestep_{}_until{}_counts_normalized.csv'.format(timestepInit,timestepEnd) 
+# dataframeFinal.to_csv(statsFileName, sep=';')
 
 print('Structs checked:')
 print(dbns_structs_checked)
