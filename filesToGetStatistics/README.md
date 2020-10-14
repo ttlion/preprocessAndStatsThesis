@@ -101,3 +101,14 @@
 * Run "python compareVars.py -h" to get usage of program.
 
 * Run "python compareVars.py -e" to get example of filesToCompare.csv.
+
+
+## File getParentsCountsOfTimesteps.py
+
+bla bla bla
+
+<p align="center" id="ref_examplefile_WithStoredDBN">
+  <img alt="DBN graphical display of examplefile_WithStoredDBN" src="example_figStoredDBN.png" style="width: 60vw; min-width: 330px;">
+</p>
+
+aaaaa [alalala](#ref_examplefile_withstoreddbn)
