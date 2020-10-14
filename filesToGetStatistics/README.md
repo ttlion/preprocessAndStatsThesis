@@ -1,7 +1,5 @@
 # Files for getting statistics
 
-aaaaa [alalala](#ref_examplefile_withstoreddbn)
-
 ## File compareVars.py
 
 * Allows getting several statistical indicators regarding the comparison of true values and respective predictions, for a certain variable throughout multiple timesteps.
@@ -114,3 +112,4 @@ bla bla bla
 </p>
 
 
+leaving this here for future REF to fig [alalala](#ref_examplefile_withstoreddbn)
