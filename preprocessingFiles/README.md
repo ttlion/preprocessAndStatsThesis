@@ -1,5 +1,12 @@
 # Files for preprocessing time-series data
 
+Files provided:
+  * [discretize_dates.py](#file-discretize_dates.py)
+  * [split_beforeVSafterNIV.py](#file-split_beforeVSafterNIV.py)
+  * [fill_data_LOCF.py](#file-fill_data_LOCF.py)
+  * [fill_data_linInterpol.py](#file-fill_data_linInterpol.py)
+  * [prune_REFs.py](#file-prune_REFs.py)
+
 ## File discretize_dates.py
 
 * Converts data provided as observations in certain dates into time-series.
@@ -27,7 +34,7 @@
 
 * Run "python discretize_dates.py -e" to get another example of input file.
 
-## File split_beforeVSafterNIV.csv
+## File split_beforeVSafterNIV.py
 
 * Converts data provided as observations in certain dates (dd/mm/yyyy) into time-series. It creates, for each id, two time-series, one before NIV and other after NIV.
   * Note: NIV is used because file was created in context of ALS disease, but NIV can be seen simply as a date according to which the time-series should be separated!
