@@ -1,11 +1,11 @@
 # Files for preprocessing time-series data
 
 Files provided:
-  * [discretize_dates.py](#file-discretize_dates.py)
-  * [split_beforeVSafterNIV.py](#file-split_beforeVSafterNIV.py)
-  * [fill_data_LOCF.py](#file-fill_data_LOCF.py)
-  * [fill_data_linInterpol.py](#file-fill_data_linInterpol.py)
-  * [prune_REFs.py](#file-prune_REFs.py)
+  * [discretize_dates.py](#file-discretize_datespy)
+  * [split_beforeVSafterNIV.py](#file-split_beforevsafternivpy)
+  * [fill_data_LOCF.py](#file-fill_data_locfpy)
+  * [fill_data_linInterpol.py](#file-fill_data_lininterpolpy)
+  * [prune_REFs.py](#file-prune_refspy)
 
 ## File discretize_dates.py
 
