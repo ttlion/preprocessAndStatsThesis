@@ -105,11 +105,80 @@
 
 ## File getParentsCountsOfTimesteps.py
 
-bla bla bla
+* The program receives as arguments:
+  * parentsToCheck.csv: a line with some variables' names (either dynamic or static variables).
+  * dbnsToUse.csv: a file with names of files in which there are stored sdtDBNs.
+    * It has multiple lines. The program will make the counts for the sets of DBNs in each line.
+      * Each line must have a tag associated, which is done by putting the names of the DBNs of each line always in the format tag_someDesiredName.
+  * timestepToCheck: the desired timestep.
+  
+* The program counts, considering the DBNs in dbnsToUse.csv, the number of children each variable from parentsToCheck.csv has in the timestep timestepToCheck.
+
+* The DBNs stored and whose filenames are put in the input file dbnsToUse.csv must be sdtDBNs.
+  * The sdtDBN framework was developed in the Master's Thesis of Tiago Leao.
+    * Check the sdtDBN webpage: [https://ttlion.github.io/sdtDBN/](https://ttlion.github.io/sdtDBN/).
+
+* For this program to work, a file named sdtDBN_v0_0_1.jar must be given in the same directory of the file getParentsCountsOfTimesteps.py.
+  * The file sdtDBN_v0_0_1.jar has the latest version of the sdtDBN program (also available in the [webpage](https://ttlion.github.io/sdtDBN/) previously mentioned).
+
+* To exemplify the usage of the program, there are provided the files:
+  * example_parentsToCheck.csv
+  * example_dbnsToUse.csv
+
+* The file example_dbnsToUse.csv uses three files with DBNs, also provided:
+  * tag1_someStoredDBN1.txt
+  * tag2_someStoredDBN2.txt
+  * tag2_someOtherStoredDBN2.txt
+
+* Although having different names, the files tag1_someStoredDBN1.txt, tag2_someStoredDBN2.txt and tag2_someOtherStoredDBN2.txt store the same sdtDBN, which is the following:
 
 <p align="center" id="ref_examplefile_WithStoredDBN">
-  <img alt="DBN graphical display of examplefile_WithStoredDBN" src="example_figStoredDBN.png" style="width: 60vw; min-width: 330px;">
+  <img alt="Graphical display of example sdtDBN" src="example_figStoredDBN.png" style="width: 60vw; min-width: 330px;">
 </p>
 
+* See the [sdtDBN webpage](https://ttlion.github.io/sdtDBN/) for details on how to get the graphical display from the given files with stored sdtDBNs!
 
-leaving this here for future REF to fig [alalala](#ref_examplefile_withstoreddbn)
+<!-- This graphical display can be obtained by running either of these instructions (check the [sdtDBN webpage](https://ttlion.github.io/sdtDBN/)):
+
+```
+java -jar sdtDBN_v0_0_1.jar -fromFile tag1_someStoredDBN1.txt -d | dot -Tpng -o tag1_someStoredDBN1.png
+
+java -jar sdtDBN_v0_0_1.jar -fromFile tag2_someStoredDBN2.txt -d | dot -Tpng -o tag2_someStoredDBN2.png
+
+java -jar sdtDBN_v0_0_1.jar -fromFile tag2_someOtherStoredDBN2.txt -d | dot -Tpng -o tag2_someOtherStoredDBN2.png
+``` -->
+
+* As the input file example_dbnsToUse.csv has
+
+```
+tag1_someStoredDBN1.txt
+tag2_someStoredDBN2.txt,tag2_someOtherStoredDBN2.txt
+```
+
+* the result of running
+
+```
+python getParentsCountsOfTimesteps.py example_parentsToCheck.csv example_dbnsToUse.csv 1
+```
+
+* is the following:
+
+```
+      X  Y  Z  A  B
+tag1  3  1  1  1  1
+tag2  6  2  2  2  2
+```
+
+* Regarding the previous result:
+  * In the first line, there are the counts of timestep 1 for the sdtDBN shown in the given [figure](#ref_examplefile_withstoreddbn). The results are correct: X has 3 children in timestep 1, Y has 1 child in timestep 1, etc.
+  * In the second line, the results are the double of the first line, because two sdtDBNs are given in the line of tag2 (see file example_dbnsToUse.csv), with both sdtDBNs being equal to the given [figure](#ref_examplefile_withstoreddbn).
+
+
+* Run "python getParentsCountsOfTimesteps.py -h" to get usage of program.
+
+* Run "python getParentsCountsOfTimesteps.py -eParents" to get example of parentsToCheck.csv.
+
+* Run "python getParentsCountsOfTimesteps.py -eDBNs" to get example of dbnsToUse.csv.
+
+
+
