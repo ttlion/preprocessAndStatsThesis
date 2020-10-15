@@ -138,7 +138,8 @@ Files provided:
 * Although having different names, the files tag1_someStoredDBN1.txt, tag2_someStoredDBN2.txt and tag2_someOtherStoredDBN2.txt store the same sdtDBN, which is the following:
 
 <p align="center" id="ref_examplefile_WithStoredDBN">
-  <img alt="Graphical display of example sdtDBN" src="example_figStoredDBN.png" style="width: 60vw; min-width: 330px;">
+  <img alt="Graphical display of the example sdtDBN" src="example_figStoredDBN.png" style="width: 60vw; min-width: 330px;">
+  <br> <em> Figure 1: Graphical display of the example sdtDBN.</em>
 </p>
 
 * See the [sdtDBN webpage](https://ttlion.github.io/sdtDBN/) for details on how to get the graphical display from the given files with stored sdtDBNs!
@@ -175,8 +176,8 @@ tag2  6  2  2  2  2
 ```
 
 * Regarding the previous result:
-  * In the first line, there are the counts of timestep 1 for the sdtDBN shown in the given [figure](#ref_examplefile_withstoreddbn). The results are correct: X has 3 children in timestep 1, Y has 1 child in timestep 1, etc.
-  * In the second line, the results are the double of the first line, because two sdtDBNs are given in the line of tag2 (see file example_dbnsToUse.csv), with both sdtDBNs being equal to the given [figure](#ref_examplefile_withstoreddbn).
+  * In the first line, there are the counts of timestep 1 for the sdtDBN shown in [Fig. 1](#ref_examplefile_withstoreddbn). The results are correct: X has 3 children in timestep 1, Y has 1 child in timestep 1, etc.
+  * In the second line, the results are the double of the first line, because two sdtDBNs are given in the line of tag2 (see file example_dbnsToUse.csv), with both sdtDBNs being equal to [Fig. 1](#ref_examplefile_withstoreddbn).
 
 
 * Run "python getParentsCountsOfTimesteps.py -h" to get usage of program.
@@ -188,4 +189,90 @@ tag2  6  2  2  2  2
 
 ## File getCountsOfRelations.py
 
-bla bla bla TODO
+* The program receives as arguments:
+  * parentsToCheck.csv: a line with some variables' names (either dynamic or static variables).
+  * dbnsToUse.csv: a file with names of files in which there are stored sdtDBNs.
+    * It has multiple lines.
+      * Each line must have a tag associated, which is done by putting the names of the DBNs of each line always in the format tag_someDesiredName.
+      * The program makes the counts considering all DBNs in all lines of dbnsToUse.csv, and displays all analyzed tags in the end of execution.
+  * timestepInit: timestep in which relations among variables start being considered.
+  * timestepEnd: timestep in which relations among variables stop being considered.
+
+* The program counts, considering the DBNs in dbnsToUse.csv, the number of edges between each pair of variables from parentsToCheck.csv. The counts are made considering, in each DBN, all timesteps from timestepInit until timestepEnd.
+  * The program provides as output a 2D matrix with the counts done for each pair of variables (the matrix is symmetric, as the direction of the edges is not important).
+    * For example, if parentsToCheck.csv has variables X1, X2 and X3, the program will output a matrix with the following format:
+
+                                   | X1 | X2 | X3
+                                ---+----+----+----
+                                X1 |    |    |
+                                ---+----+----+----
+                                X2 |    |    |
+                                ---+----+----+----
+                                X3 |    |    |
+    
+    * Each element of the previous matrix has the number of edges between the respective variables, considering all DBNs from dbnsToUse.csv, and considering, for each DBN, all timesteps between timestepInit and timestepEnd. 
+      * The direction of the edges is not relevant, which makes the matrix symmetric. For example, the elements (X1,X2) and (X2,X1) of the previous matrix are the same, and each one has the total number of edges that are either X1->X2 or X2->X1, when considering all DBNs from dbnsToUse.csv, and considering, for each DBN, all timesteps between timestepInit and timestepEnd.
+
+* The DBNs stored and whose filenames are put in the input file dbnsToUse.csv must be sdtDBNs.
+  * The sdtDBN framework was developed in the Master's Thesis of Tiago Leao.
+    * Check the sdtDBN webpage: [https://ttlion.github.io/sdtDBN/](https://ttlion.github.io/sdtDBN/).
+
+* For this program to work, a file named sdtDBN_v0_0_1.jar must be given in the same directory of the file getCountsOfRelations.py.
+  * The file sdtDBN_v0_0_1.jar has the latest version of the sdtDBN program (also available in the [webpage](https://ttlion.github.io/sdtDBN/) previously mentioned).
+
+* To exemplify the usage of the program, there are provided the files:
+  * example_parentsToCheck.csv
+  * example_dbnsToUse.csv
+
+* The file example_dbnsToUse.csv uses three files with DBNs, also provided:
+  * tag1_someStoredDBN1.txt
+  * tag2_someStoredDBN2.txt
+  * tag2_someOtherStoredDBN2.txt
+
+* Although having different names, the files tag1_someStoredDBN1.txt, tag2_someStoredDBN2.txt and tag2_someOtherStoredDBN2.txt store the same sdtDBN, which is the sdtDBN of [Fig. 1](#ref_examplefile_withstoreddbn), already used in the [explanation of the file getParentsCountsOfTimesteps.py](#file-getparentscountsoftimestepspy).
+
+* As the input file example_dbnsToUse.csv has
+
+```
+tag1_someStoredDBN1.txt
+tag2_someStoredDBN2.txt,tag2_someOtherStoredDBN2.txt
+```
+
+* the result of running
+
+```
+python getCountsOfRelations.py example_parentsToCheck.csv example_dbnsToUse.csv 0 2
+```
+
+* is the following:
+
+```
+    X   Y  Z  A  B
+X   0  15  6  3  0
+Y  15   0  9  0  3
+Z   6   9  0  0  3
+A   3   0  0  0  0
+B   0   3  3  0  0
+Structs checked:
+['tag1', 'tag2']
+```
+
+* The previous result is as expected, because it consists of multiplying by 3 each element of the table obtained just for one DBN equal to [Fig. 1](#ref_examplefile_withstoreddbn). 
+  * This is expected because the file example_dbnsToUse.csv has three DBNs equal to [Fig. 1](#ref_examplefile_withstoreddbn)!!
+  
+  * Note that the table obtained just for one DBN equal to [Fig. 1](#ref_examplefile_withstoreddbn) is:
+
+                                     X  Y  Z  A  B
+                                  X  0  5  2  1  0
+                                  Y  5  0  3  0  1
+                                  Z  2  3  0  0  1
+                                  A  1  0  0  0  0
+                                  B  0  1  1  0  0
+
+    * This table is obtained from the sdtDBN of [Fig. 1](#ref_examplefile_withstoreddbn). The counts match: throughout all timesteps of the sdtDBN of [Fig. 1](#ref_examplefile_withstoreddbn), there are 5 edges between X and Y, 2 edges between X and Z, etc.
+
+* Run "python getCountsOfRelations.py -h" to get usage of program.
+
+* Run "python getCountsOfRelations.py -eParents" to get example of parentsToCheck.csv.
+
+* Run "python getCountsOfRelations.py -eDBNs" to get example of dbnsToUse.csv.
